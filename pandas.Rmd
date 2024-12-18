@@ -1,0 +1,179 @@
+```{R}
+library(dplyr)
+
+movies <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv")
+
+movies$release_date <- as.Date(movies$release_date, format = "%Y-%m-%d")
+
+movies_after_1995 <- movies %>%
+  filter(release_date > as.Date("1995-01-01"))
+
+print(movies_after_1995)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv")
+
+result <- str(df)
+
+cat("Details of the DataFrame:\n")
+print(result)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+third_movie <- df[3, ]
+
+cat("Details of the third movie:\n")
+print(third_movie)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+
+num_rows <- nrow(df)
+num_cols <- ncol(df)
+
+cat("Number of rows:", num_rows, "\n")
+cat("Number of columns:", num_cols, "\n")
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+title_genres <- df[, c("title", "genres")]
+
+cat("Details of the columns 'title' and 'genres':\n")
+print(title_genres)
+
+```
+```{R}
+library(dplyr)
+
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+movie_details <- df %>% filter(title == "Grumpier Old Men")
+
+cat("Details of the movie 'Grumpier Old Men':\n")
+print(movie_details)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+fifth_movie <- df[5, ]
+
+cat("Details of the fifth movie:\n")
+print(t(fifth_movie))
+
+```
+```{R}
+
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+subset_df <- df[, c("title", "genres", "budget", "release_date")]
+
+cat("Smaller DataFrame with a subset of features:\n")
+print(subset_df)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+cat("First 10 rows of the DataFrame:\n")
+print(head(df, 10))
+
+```
+```{R}
+library(dplyr)
+
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+sorted_df <- df %>% arrange(release_date)
+
+cat("DataFrame sorted by release_date:\n")
+print(sorted_df)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+df$release_date <- as.Date(df$release_date)
+
+movies_after_1995 <- df[df$release_date > as.Date("1995-01-01"), ]
+
+cat("Movies released after 1995-01-01:\n")
+print(movies_after_1995)
+
+```
+```{R}
+library(dplyr)
+
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+sorted_df <- df %>% arrange(desc(runtime))
+
+cat("Movies sorted by runtime in descending order:\n")
+print(sorted_df)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+df$revenue <- as.numeric(df$revenue)
+df$budget <- as.numeric(df$budget)
+
+filtered_movies <- df[df$revenue > 2000000 & df$budget < 1000000, ]
+
+cat("Movies with revenue more than 2 million and budget less than 1 million:\n")
+print(filtered_movies)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+longest_runtime <- max(df$runtime, na.rm = TRUE)
+shortest_runtime <- min(df$runtime, na.rm = TRUE)
+
+cat("Longest runtime:", longest_runtime, "minutes\n")
+cat("Shortest runtime:", shortest_runtime, "minutes\n")
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+sorted_df <- df[order(df$vote_count), ]
+
+total_movies <- nrow(sorted_df)
+index_70_percent <- floor(0.7 * total_movies)
+
+votes_70_percent <- sorted_df$vote_count[index_70_percent]
+
+cat("Number of votes garnered by the 70% movie:", votes_70_percent,"\n")
+
+```
+
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+filtered_movies <- df[df$runtime > 30 & df$runtime < 360, c("title", "runtime")]
+
+cat("Movies with runtime longer than 30 minutes and shorter than 360 minutes:\n")
+print(filtered_movies)
+
+```
+```{R}
+df <- read.csv("/home/climaque/Téléchargements/movies_metadata.csv", stringsAsFactors = FALSE)
+
+specified_votes <- 1000
+
+
+filtered_movies <- df[df$vote_count == specified_votes, c("title", "vote_count")]
+
+
+cat("Movies with", specified_votes, "votes:\n")
+print(filtered_movies)
+ 
+```

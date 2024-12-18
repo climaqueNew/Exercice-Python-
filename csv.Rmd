@@ -1,0 +1,161 @@
+```{R}
+data <- read.csv("departments.csv", header = FALSE, sep = " ", quote = '"')
+
+for (i in 1:nrow(data)) {
+  print(paste(data[i, ], collapse = ", "))
+}
+
+```
+```{R}
+data <- read.delim("countries.csv", header = FALSE, sep = "\t")
+
+apply(data, 1, function(row) {
+  print(paste(row, collapse = ", "))
+})
+
+```
+```{R}
+data <- read.csv("employees.csv", header = FALSE)
+data_list <- split(data, seq(nrow(data)))
+print(data_list)
+
+```
+```{R}
+data <- read.csv("departments.csv", header = TRUE)
+for (i in 1:nrow(data)) {
+  print(as.list(data[i, ]))
+}
+
+```
+```{R}
+cat("\nAvec espaces initiaux après un délimiteur:\n")
+data <- read.csv("departments.csv", header = FALSE, strip.white = FALSE)
+apply(data, 1, function(row) {
+  print(paste(row, collapse = ", "))
+})
+
+cat("\n\nSans espaces initiaux après un délimiteur:\n")
+data_clean <- read.csv("departments.csv", header = FALSE, strip.white = TRUE)
+apply(data_clean, 1, function(row) {
+  print(paste(row, collapse = ", "))
+})
+
+```
+```{R}
+data <- read.csv("temp.csv", sep = "|", header = FALSE, strip.white = TRUE, quote = "\"")
+for (row in 1:nrow(data)) {
+  print(data[row, ])
+}
+
+```
+```{R}
+data <- read.csv("departments.csv", header = TRUE)
+cat("ID Department Name\n")
+cat("---------------------------------\n")
+
+for (i in 1:nrow(data)) {
+  cat(data[i, "department_id"], data[i, "department_name"], "\n")
+}
+
+```
+```{R}
+data <- read.csv("departments.csv", header = TRUE, sep = " ", quote = ",")
+cat("Field names are:\n")
+cat(paste(names(data), collapse = ", "), "\n")
+cat("\nRows from the file:\n")
+for (i in 2:nrow(data)) {
+  cat(paste(data[i, ], collapse = ", "), "\n")
+}
+cat("\nTotal no. of rows: ", nrow(data), "\n")
+
+```
+```{R}
+file_name <- "temp.csv"
+file_conn <- file(file_name, "w")
+
+writeLines("id1,id2,date", file_conn)
+
+for (i in 0:2) {
+  row <- paste0(
+    i + 1, ",",
+    intToUtf8(97 + i), ",",
+    sprintf("01/%02d/2019", i + 1)
+  )
+  writeLines(row, file_conn)
+}
+
+close(file_conn)
+
+cat(readLines(file_name), sep = "\n")
+
+```
+```{R}
+data <- list(
+  c(10, 'a1', 1),
+  c(12, 'a2', 3),
+  c(14, 'a3', 5),
+  c(16, 'a4', 7),
+  c(18, 'a5', 9)
+)
+
+write.table(
+  data, 
+  file = "temp.csv", 
+  sep = " ", 
+  col.names = FALSE, 
+  row.names = FALSE, 
+  quote = FALSE
+)
+
+data_read <- read.table("temp.csv", sep = " ", header = FALSE)
+
+apply(data_read, 1, function(row) {
+  cat(paste(row, collapse = ", "), "\n")
+})
+
+```
+```{R}
+
+data <- list(
+  c(10, 'a1', 1),
+  c(12, 'a2', 3),
+  c(14, 'a3', 5),
+  c(16, 'a4', 7),
+  c(18, 'a5', 9)
+)
+
+write.table(
+  data, 
+  file = "temp.csv", 
+  sep = " ", 
+  col.names = FALSE, 
+  row.names = FALSE, 
+  quote = FALSE
+)
+
+cat("\nDonnées lues avec espace comme délimiteur:\n")
+data_read <- read.table("temp.csv", sep = " ", header = FALSE)
+apply(data_read, 1, function(row) {
+  cat(paste(row, collapse = ", "), "\n")
+})
+
+names(data_read) <- c("ID", "Label", "Value")
+print(data_read)
+
+
+cat("\nTotal no. of rows: ", nrow(data_read), "\n")
+cat("Field names are: ", paste(names(data_read), collapse = ", "), "\n")
+
+write.table(
+  data, 
+  file = "temp_pipe.csv", 
+  sep = "|", 
+  col.names = TRUE, 
+  row.names = FALSE, 
+  quote = FALSE
+)
+cat("\nDonnées lues avec le délimiteur '|' :\n")
+data_pipe <- read.table("temp_pipe.csv", sep = "|", header = TRUE)
+print(data_pipe)
+
+```

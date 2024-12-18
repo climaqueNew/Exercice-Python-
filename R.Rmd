@@ -1,0 +1,318 @@
+```{R}
+library(readr)
+
+
+covid_data <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-17-2020.csv")
+
+
+print(covid_data)
+
+cat("\nDataset information:\n")
+str(covid_data)
+
+cat("\nMissing data information:\n")
+colSums(is.na(covid_data))
+
+```
+```{R}
+library(readr)
+library(dplyr)
+
+covid_data <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-17-2020.csv")
+covid_data$Active <- covid_data$Confirmed - covid_data$Deaths - covid_data$Recovered
+result <- covid_data %>%
+  group_by(`Country/Region`) %>%
+  summarise(
+    Confirmed = sum(Confirmed, na.rm = TRUE),
+    Deaths = sum(Deaths, na.rm = TRUE),
+    Recovered = sum(Recovered, na.rm = TRUE),
+    Active = sum(Active, na.rm = TRUE)
+  ) %>%
+  ungroup()
+print(result)
+
+```
+```{R}
+library(readr)
+library(dplyr)
+
+covid_data <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-16-2020.csv")
+
+les
+data <- covid_data %>%
+  group_by(`Country/Region`, `Province/State`) %>%
+  summarise(
+    Confirmed = max(Confirmed, na.rm = TRUE),
+    Deaths = max(Deaths, na.rm = TRUE),
+    Recovered = max(Recovered, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+print(data)
+
+```
+```{R}
+library(readr)
+library(dplyr)
+
+
+covid_data <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-17-2020.csv")
+c_data <- covid_data %>%
+  filter(`Country/Region` == "China") %>%
+  select(`Province/State`, Confirmed, Deaths, Recovered)
+result <- c_data %>%
+  arrange(desc(Confirmed)) %>%
+  reset_index(drop = TRUE)
+
+print(result)
+
+```
+```{R}
+library(readr)
+library(dplyr)
+
+covid_data <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-17-2020.csv")
+data <- covid_data %>%
+  group_by(`Country/Region`) %>%
+  summarise(
+    Confirmed = sum(Confirmed, na.rm = TRUE),
+    Deaths = sum(Deaths, na.rm = TRUE),
+    Recovered = sum(Recovered, na.rm = TRUE)
+  ) %>%
+  ungroup()
+result <- data %>%
+  filter(Deaths > 0) %>%
+  select(`Country/Region`, Deaths)
+print(result)
+
+```
+```{R}
+library(readr)
+library(dplyr)
+
+covid_data <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-17-2020.csv")
+
+data <- covid_data %>%
+  group_by(`Country/Region`) %>%
+  summarise(
+    Confirmed = sum(Confirmed, na.rm = TRUE),
+    Deaths = sum(Deaths, na.rm = TRUE),
+    Recovered = sum(Recovered, na.rm = TRUE)
+  ) %>%
+  ungroup()
+result <- data %>%
+  filter(Confirmed == Deaths) %>%
+  select(`Country/Region`, Confirmed, Deaths)
+result <- result %>%
+  arrange(desc(Confirmed))
+result <- result %>%
+  filter(Confirmed > 0)
+result <- result %>% mutate(RowIndex = row_number()) %>% select(-RowIndex)
+
+print(result)
+
+```
+```{R}
+library(readr)
+library(dplyr)
+covid_data <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-17-2020.csv")
+data <- covid_data %>%
+  group_by(`Country/Region`) %>%
+  summarise(
+    Confirmed = sum(Confirmed, na.rm = TRUE),
+    Deaths = sum(Deaths, na.rm = TRUE),
+    Recovered = sum(Recovered, na.rm = TRUE)
+  ) %>%
+  ungroup()
+result <- data %>%
+  filter(Confirmed == Recovered) %>%
+  select(`Country/Region`, Confirmed, Recovered)
+result <- result %>%
+  arrange(desc(Confirmed))
+result <- result %>%
+  filter(Confirmed > 0)
+print(result)
+
+```
+```{R}
+library(readr)
+library(dplyr)
+
+covid_data <- read_csv(
+  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-18-2020.csv",
+  col_types = cols_only(
+    `Last Update` = col_character(),
+    `Country/Region` = col_character(),
+    Confirmed = col_double(),
+    Deaths = col_double(),
+    Recovered = col_double()
+  )
+)
+result <- covid_data %>%
+  group_by(`Country/Region`) %>%
+  summarise(
+    `Last Update` = max(`Last Update`, na.rm = TRUE),
+    Confirmed = max(Confirmed, na.rm = TRUE),
+    Deaths = max(Deaths, na.rm = TRUE),
+    Recovered = max(Recovered, na.rm = TRUE)
+  ) %>%
+  ungroup()
+result <- result %>%
+  arrange(desc(Confirmed)) %>%
+  slice(1:10)
+print(result)
+
+```
+```{R}
+library(ggplot2)
+library(dplyr)
+library(readr)
+
+url_link <- 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-19-2020.csv'
+covid_data <- read_csv(url(url_link))
+
+covid_data$Active <- covid_data$Confirmed - covid_data$Deaths - covid_data$Recovered
+
+r_data <- covid_data %>%
+  group_by(`Country/Region`) %>%
+  summarise(Deaths = sum(Deaths, na.rm = TRUE),
+            Confirmed = sum(Confirmed, na.rm = TRUE),
+            Recovered = sum(Recovered, na.rm = TRUE),
+            Active = sum(Active, na.rm = TRUE)) %>%
+  arrange(desc(Deaths))
+
+r_data <- r_data %>%
+  filter(Deaths > 50)
+
+
+ggplot(r_data, aes(x = `Country/Region`)) +
+  geom_line(aes(y = Deaths, color = 'Deaths'), size = 1) +
+  geom_line(aes(y = Confirmed, color = 'Confirmed'), size = 1) +
+  geom_line(aes(y = Recovered, color = 'Recovered'), size = 1) +
+  geom_line(aes(y = Active, color = 'Active'), size = 1) +
+  labs(title = "Total Deaths(>50), Confirmed, Recovered and Active Cases by Country",
+       x = "Country/Region",
+       y = "Number of Cases",
+       color = "Legend") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme_minimal()
+
+```
+```{R}
+library(ggplot2)
+library(dplyr)
+library(readr)
+
+
+url_link <- 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-17-2020.csv'
+covid_data <- read_csv(url(url_link))
+
+
+us_data <- covid_data %>%
+  filter(`Country/Region` == "US") %>%
+  select(-`Country/Region`, -Latitude, -Longitude)
+
+
+us_data <- us_data[rowSums(us_data != 0, na.rm = TRUE) > 0, ]
+
+
+us_data_death <- us_data %>%
+  group_by(`Province/State`) %>%
+  summarise(Deaths = sum(Deaths, na.rm = TRUE)) %>%
+  filter(Deaths > 0)
+
+
+ggplot(us_data_death, aes(x = reorder(`Province/State`, -Deaths), y = Deaths)) +
+  geom_bar(stat = "identity", fill = "red") +
+  geom_text(aes(label = Deaths), vjust = -0.5) + 
+  labs(title = "State-wise Deaths Reported of COVID-19 in USA",
+       x = "Province/State",
+       y = "Number of Deaths") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) 
+
+```
+```{R}
+library(ggplot2)
+library(dplyr)
+library(readr)
+
+
+url_link <- 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-17-2020.csv'
+covid_data <- read_csv(url(url_link))
+
+
+us_data <- covid_data %>%
+  filter(`Country/Region` == "US") %>%
+  select(-`Country/Region`, -Latitude, -Longitude)
+
+
+us_data <- us_data[rowSums(us_data != 0, na.rm = TRUE) > 0, ]
+
+
+us_data_death <- us_data %>%
+  group_by(`Province/State`) %>%
+  summarise(Deaths = sum(Deaths, na.rm = TRUE)) %>%
+  filter(Deaths > 0)
+
+
+ggplot(us_data_death, aes(x = reorder(`Province/State`, -Deaths), y = Deaths)) +
+  geom_bar(stat = "identity", fill = "red") +
+  geom_text(aes(label = Deaths), vjust = -0.5) + 
+  labs(title = "State-wise Deaths Reported of COVID-19 in USA",
+       x = "Province/State",
+       y = "Number of Deaths") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) 
+
+```
+```{R}
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tidyr)
+
+
+url_link <- 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-19-2020.csv'
+covid_data <- read_csv(url(url_link))
+covid_data <- covid_data %>%
+  mutate(Active = Confirmed - Deaths - Recovered)
+combine_us_data <- covid_data %>%
+  filter(`Country/Region` == "US") %>%
+  select(-`Country/Region`, -Latitude, -Longitude)
+combine_us_data <- combine_us_data[rowSums(combine_us_data != 0, na.rm = TRUE) > 0, ]
+combine_us_data <- combine_us_data %>%
+  group_by(`Province/State`) %>%
+  summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+            Deaths = sum(Deaths, na.rm = TRUE),
+            Recovered = sum(Recovered, na.rm = TRUE),
+            Active = sum(Active, na.rm = TRUE)) %>%
+  pivot_longer(cols = c(Confirmed, Deaths, Recovered, Active), names_to = "Case", values_to = "Count")
+ggplot(combine_us_data, aes(x = reorder(`Province/State`, -Count), y = Count, fill = Case)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = Count), position = position_dodge(width = 0.8), vjust = -0.5) +
+  labs(title = "USA State wise combine number of confirmed, deaths, recovered, active COVID-19 cases",
+       x = "Province/State", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))  
+```
+```{R}
+library(ggplot2)
+library(dplyr)
+library(readr)
+
+covid_data <- read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-19-2020.csv')
+
+grouped <- covid_data %>%
+  group_by(`Last Update`) %>%
+  summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+            Deaths = sum(Deaths, na.rm = TRUE))
+
+
+ggplot(grouped, aes(x = `Last Update`, y = Confirmed)) +
+  geom_line(color = "blue") +
+  ggtitle("Worldwide Confirmed Novel Coronavirus (COVID-19) Cases Over Time") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```

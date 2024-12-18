@@ -1,0 +1,81 @@
+```{R}
+library(dplyr)  
+library(AER)  
+
+data("Fertility")  
+
+print("Aperçu des données Fertility :")
+glimpse(Fertility) 
+
+
+```
+```{R}
+Fertility %>% 
+  select (age, work)  %>% 
+  slice ( 35 : 50 )
+print(subset_data)
+
+```
+```{R}
+Fertility %>%
+  slice(n())
+
+```
+```{R}
+library(dplyr)
+
+result <- Fertility %>%
+  filter(morekids == "yes" & gender1 == "female") %>%
+  count()
+print(result)
+
+```
+```{R}
+library(dplyr)
+
+
+Fertility %>%
+  group_by(gender1, gender2) %>%
+  count()
+
+print(most_common_combination)
+
+```
+```{R}
+library(dplyr)
+result <- Fertility %>%
+  group_by(afam, hispanic, other) %>%
+  summarise(proportion_work_4_or_less = mean(work <= 4))
+print(result)
+```
+```{R}
+library(dplyr)
+
+proportion_boy <- Fertility %>%
+   filter(between(age, 22, 24)) %>% 
+   summarise(mean_boy_first = mean(gender1 == "male"))
+
+print(proportion_boy)
+```
+```{R}
+library(dplyr)
+Fertility <- Fertility %>%
+  mutate(age_squared = age^2)
+head(Fertility)
+```
+```{R}
+library(dplyr)
+
+Fertility %>%
+  group_by(afam) %>%
+  summarise(
+    proportion_boy_first = mean(gender1 == "male"),
+    n_observations = n()
+  ) %>%
+  arrange(proportion_boy_first)
+```
+```{R}
+Fertility %>%
+  group_by(gender1, gender2) %>%
+  summarise(mean(morekids == "yes"))
+```
